@@ -18,7 +18,7 @@ Bu tətbiq istifadəçilərə fərqli kateqoriyalar və dil səviyyələri (*A1,
 
 <p align="center">
   <img src="assets/esas_sehife.png" alt="Əsas Panel" width="75%">
-  <img src="assets/cumle_generator.png" alt="Əsas Panel" width="75%">
+  <img src="assets/cumle_generator.png" alt="AI Story Generation" width="75%">
   <img src="assets/all_words.png" alt="Ümumi Lüğət Bazası" width="75%">
 </p>
 
