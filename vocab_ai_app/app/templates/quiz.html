@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="text-align: center; min-height: 350px;">
+    <h3 style="margin-bottom: 20px;">🔄 İkitərəfli Qarışıq İmtahan</h3>
+    <div id="loader" style="font-weight: 500; color: gray;">Söz bazası tənzimlənir, gözləyin...</div>
+
+    <div id="quizContainer" style="display: none;">
+        <span id="quizMode" class="badge" style="background-color: var(--primary); color: white;"></span>
+        <h1 id="quizTarget" style="font-size: 2.8rem; font-weight: 800; margin: 25px 0; letter-spacing: -0.5px;"></h1>
+        
+        <input type="text" id="userInput" placeholder="Tərcüməsini yazın..." autocomplete="off" style="text-align: center; font-size: 1.2rem;">
+        <button id="checkBtn" class="btn">Cavabı Təsdiqlə</button>
+
+        <div id="feedbackCard" class="card" style="display: none; margin-top: 25px; text-align: left; background-color: var(--accent);">
+            <h3 id="feedbackStatus"></h3>
+            <p id="correctAnswerDisplay" style="font-size: 1.1rem; margin-top: 10px;"></p>
+            <p id="contextDisplay" style="color: gray; font-style: italic; margin-top: 8px; font-size: 0.95rem;"></p>
+            <button id="nextBtn" class="btn btn-success" style="margin-top: 20px;">Növbəti Sual ➡️</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let cards = [];
+let idx = 0;
+
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const response = await fetch('/api/quiz-cards');
+        cards = await response.json();
+        document.getElementById("loader").style.display = "none";
+        if (cards.length === 0) {
+            document.getElementById("loader").innerText = "Bazada imtahan üçün yetərli söz yoxdur. Öncə söz əlavə edin.";
+            document.getElementById("loader").style.display = "block";
+        } else {
+            document.getElementById("quizContainer").style.display = "block";
+            loadQuestion();
+        }
+    } catch (e) {
+        document.getElementById("loader").innerText = "Məlumat yüklənərkən xəta baş verdi.";
+    }
+});
+
+function loadQuestion() {
+    if (idx >= cards.length) {
+        document.getElementById("quizContainer").innerHTML = "<h2>🎉 Möhtəşəm! Bütün imtahan kartlarını uğurla tamamladınız!</h2><br><a href='/' class='btn'>Dashboard-a qayıt</a>";
+        return;
+    }
+    const currentCard = cards[idx];
+    document.getElementById("quizMode").innerText = currentCard.type;
+    document.getElementById("quizTarget").innerText = currentCard.question;
+    document.getElementById("userInput").value = "";
+    document.getElementById("userInput").disabled = false;
+    document.getElementById("feedbackCard").style.display = "none";
+    document.getElementById("checkBtn").style.display = "block";
+    document.getElementById("userInput").focus();
+}
+
+document.getElementById("checkBtn").addEventListener("click", () => {
+    const currentCard = cards[idx];
+    const userVal = document.getElementById("userInput").value.trim().toLowerCase();
+    const correctVal = currentCard.correct_answer.trim().toLowerCase();
+
+    document.getElementById("userInput").disabled = true;
+    document.getElementById("checkBtn").style.display = "none";
+
+    const feedbackStatus = document.getElementById("feedbackStatus");
+    
+    // Çevik yoxlama məntiqi (tam bərabərlik və ya çoxlu mənaların daxilində tapılma)
+    if (userVal === correctVal || (correctVal.includes(userVal) && userVal.length > 2)) {
+        feedbackStatus.innerText = "🟢 Tamamilə Doğrudur!";
+        feedbackStatus.style.color = "var(--success)";
+    } else {
+        feedbackStatus.innerText = "🔴 Səhv Qeyd Edildi!";
+        feedbackStatus.style.color = "var(--danger)";
+    }
+
+    document.getElementById("correctAnswerDisplay").innerHTML = `<strong>Düzgün Cavab:</strong> ${currentCard.correct_answer}`;
+    document.getElementById("contextDisplay").innerHTML = currentCard.context ? `<strong>Yaddaş köməkçisi (Kontekst):</strong> ${currentCard.context}` : "";
+    document.getElementById("feedbackCard").style.display = "block";
+});
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+    idx++;
+    loadQuestion();
+});
+</script>
+{% endblock %}

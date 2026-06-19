@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .db-container {
+        width: 100% !important;
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+        padding: 20px !important;
+    }
+    .panel-card {
+        background-color: #161b26 !important;
+        border: 1px solid #2d3748 !important;
+        border-radius: 12px !important;
+        padding: 24px !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+        width: 100% !important;
+        margin-bottom: 30px !important;
+    }
+    .panel-title {
+        color: #ffffff !important;
+        font-size: 1.2rem !important;
+        font-weight: 600 !important;
+        margin-bottom: 20px !important;
+    }
+    
+    /* Üst-üstə minməni tamamilə həll edən Modern Flexbox Sırası */
+    .form-row-flex {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 20px !important;
+        align-items: flex-end !important;
+        width: 100% !important;
+    }
+    
+    /* Böyük qutu üçün (Kateqoriya) */
+    .form-col-large {
+        flex: 2 !important;
+        min-width: 280px !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    /* Kiçik qutular üçün (Səviyyə və Düymə) */
+    .form-col-small {
+        flex: 1 !important;
+        min-width: 180px !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .custom-label {
+        color: #a0aec0 !important;
+        font-size: 0.9rem !important;
+        font-weight: 500 !important;
+        margin-bottom: 8px !important;
+        display: block !important;
+    }
+    .custom-select {
+        background-color: #1f2736 !important;
+        color: #ffffff !important;
+        border: 1px solid #4a5568 !important;
+        border-radius: 8px !important;
+        padding: 0 14px !important;
+        font-size: 0.95rem !important;
+        width: 100% !important;
+        height: 48px !important;
+        box-sizing: border-box !important;
+    }
+    .section-title {
+        font-size: 1.3rem !important;
+        font-weight: 600 !important;
+        margin-top: 25px !important;
+        margin-bottom: 20px !important;
+    }
+    .vocab-card {
+        position: relative !important;
+        background-color: #161b26 !important;
+        border: 1px solid #2d3748 !important;
+        border-radius: 10px !important;
+        padding: 20px !important;
+        min-height: 160px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    }
+    .vocab-word {
+        color: #ffffff !important;
+        font-size: 1.35rem !important;
+        font-weight: 700 !important;
+        margin: 0 !important;
+        padding-right: 55px !important;
+    }
+    .vocab-meaning {
+        color: #cbd5e0 !important;
+        font-size: 0.95rem !important;
+        margin-top: 6px !important;
+        margin-bottom: 15px !important;
+        line-height: 1.4 !important;
+    }
+    .vocab-badge {
+        position: absolute !important;
+        top: 18px !important;
+        right: 18px !important;
+        font-size: 0.75rem !important;
+        padding: 4px 8px !important;
+        font-weight: 600 !important;
+    }
+    .card-footer-line {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        margin-top: auto !important;
+        padding-top: 10px !important;
+        border-top: 1px solid #2d3748 !important;
+    }
+    .vocab-category {
+        color: #718096 !important;
+        font-size: 0.8rem !important;
+        white-space: nowrap !important;
+    }
+    .study-btn {
+        background-color: transparent !important;
+        border: 1px solid #3b82f6 !important;
+        color: #3b82f6 !important;
+        font-size: 0.85rem !important;
+        font-weight: 500 !important;
+        padding: 6px 14px !important;
+        border-radius: 6px !important;
+        text-decoration: none !important;
+        white-space: nowrap !important;
+        transition: all 0.2s !important;
+    }
+    .study-btn:hover {
+        background-color: #3b82f6 !important;
+        color: #ffffff !important;
+    }
+    .submit-btn {
+        background-color: #2563eb !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0 20px !important;
+        width: 100% !important;
+        height: 48px !important;
+        box-sizing: border-box !important;
+        cursor: pointer !important;
+        transition: background-color 0.2s !important;
+    }
+    .submit-btn:hover {
+        background-color: #1d4ed8 !important;
+    }
+</style>
+
+<div class="db-container">
+
+    <div class="panel-card">
+        <div class="panel-title">
+            <span>🌟</span> Öyrənmə Yolunu Seç və AI Sözləri Yüklə
+        </div>
+        <form action="/generate-path-words" method="POST">
+            <div class="form-row-flex">
+                <div class="form-col-large">
+                    <label class="custom-label">Kurs / Kateqoriya</label>
+                    <select name="category" class="custom-select">
+                        <option value="Kiber Təhlükəsizlik">🖥️ Kiber Təhlükəsizlik (Cybersecurity)</option>
+                        <option value="İnformasiya Texnologiyaları və Sistem Adminliyi">🌐 İT və Sistem Adminliyi (Sysadmin)</option>
+                        <option value="Proqramlaşdırma və Proqram Mühəndisliyi">🚀 Proqramlaşdırma (Software Engineering)</option>
+                        <option value="Bulud Texnologiyaları və DevOps">☁️ Bulud Sistemləri (Cloud & DevOps)</option>
+                        
+                        <option value="Biznes və Korporativ İngilis dili">📊 Biznes İngilis dili (Business English)</option>
+                        <option value="Maliyyə, Bank və İqtisadiyyat">💰 Maliyyə və İqtisadiyyat (Finance)</option>
+                        <option value="Tibb və Səhiyyə">🩺 Tibb və Səhiyyə (Medical)</option>
+                        
+                        <option value="Akademik İngilis dili və IELTS">🎓 Akademik İngilis dili & IELTS</option>
+                        <option value="Səyahət, Turizm və Otelçilik">✈️ Səyahət və Turizm (Travel)</option>
+                        <option value="Məktəb və Gündəlik Həyat">🏫 Gündəlik Həyat & Mövzular</option>
+                    </select>
+                </div>
+                <div class="form-col-small">
+                    <label class="custom-label">Dil Səviyyəsi</label>
+                    <select name="level" class="custom-select">
+                        <option value="A1">A1 (Beginner)</option>
+                        <option value="A2">A2 (Elementary)</option>
+                        <option value="B1">B1 (Intermediate)</option>
+                        <option value="B2">B2 (Upper Intermediate)</option>
+                    </select>
+                </div>
+                <div class="form-col-small">
+                    <button type="submit" class="submit-btn">Sözləri Yüklə</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <div class="section-title">
+            📋 Gündəlik Təkrar Siyahısı (<span style="color: #3b82f6 !important; font-weight: 600;">{{ due_count }}</span> / Toplam: {{ total_count }})
+        </div>
+        
+        {% if due_words %}
+            <div class="row g-4">
+                {% for vocab in due_words %}
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <div class="vocab-card">
+                            <div>
+                                <h5 class="vocab-word">{{ vocab.word }}</h5>
+                                <span class="badge bg-dark text-info border border-info vocab-badge">{{ vocab.level }}</span>
+                                <p class="vocab-meaning">
+                                    {{ vocab.meaning }}
+                                    <br>
+                                    <small style="color: #20c997; font-weight: bold; display: block; margin-top: 6px;">🇦🇿 {{ vocab.default_translation }}</small>
+                                </p>
+                            </div>
+                            <div class="card-footer-line">
+                                <span class="vocab-category">📁 {{ vocab.category }}</span>
+                                <a href="/study/{{ vocab.id }}" class="study-btn">Öyrən / Təkrar Et</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="panel-card text-center py-5">
+                <p class="mb-0" style="font-weight: 600 !important; font-size: 1.1rem !important; color: #2ecc71 !important;">
+                    🎉 Möhtəşəm! Bu gün üçün bütün sözləri tamamlamısınız!
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

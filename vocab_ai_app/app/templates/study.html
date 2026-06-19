@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="text-align: center; padding: 40px 20px;">
+    <span class="badge" style="background-color: var(--border);">Aralıqlı Sistem Təkrarı</span>
+    <h1 style="font-size: 3.5rem; font-weight: 800; color: var(--primary); margin: 20px 0;">{{ vocab.word }}</h1>
+    
+    <div class="card" style="background-color: var(--accent); text-align: left; border-left: 5px solid var(--primary);">
+        <h4 style="margin-bottom: 5px;">📖 Orijinal Kontekst:</h4>
+        <p style="font-size: 1.1rem; line-height: 1.5;">{{ vocab.default_context }}</p>
+        <button class="btn" style="padding: 6px 12px; width: auto; font-size: 0.85rem; margin-top: 10px;" onclick="toggleVisibility('baseTrans')">Tərcüməni İncələ</button>
+        <div id="baseTrans" class="translation-box">
+            <strong>AZ:</strong> {{ vocab.default_translation }}
+        </div>
+    </div>
+
+    <div id="aiSentenceContainer" style="text-align: left;"></div>
+    <button id="aiBtn" class="btn" style="background: linear-gradient(to right, #8e44ad, #9b59b6); margin-bottom: 30px;" onclick="fetchGroqSentence('{{ vocab.word }}')">Groq AI-dan Yeni Cümlə Al</button>
+
+    <div style="border-top: 1px solid var(--border); padding-top: 25px;">
+        <h4 style="margin-bottom: 15px;">Bu sözü tam dəqiqliklə xatırlaya bildiniz?</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <form action="/study/{{ vocab.id }}/review" method="POST">
+                <input type="hidden" name="success" value="true">
+                <button type="submit" class="btn btn-success">✓ Bəli (Növbəti Mərhələ)</button>
+            </form>
+            <form action="/study/{{ vocab.id }}/review" method="POST">
+                <input type="hidden" name="success" value="false">
+                <button type="submit" class="btn btn-danger">✕ Xeyr (Yenidən Göstər)</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

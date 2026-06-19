@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .story-container {
+        width: 100% !important;
+        max-width: 800px !important;
+        margin: 40px auto !important;
+        padding: 0 20px !important;
+        box-sizing: border-box !important;
+    }
+    .story-card {
+        background-color: #161b26 !important;
+        border: 1px solid #2d3748 !important;
+        border-radius: 12px !important;
+        padding: 35px !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+    }
+    .story-title {
+        color: #ffffff !important;
+        font-size: 1.5rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 25px !important;
+        text-align: center !important;
+        letter-spacing: -0.5px !important;
+    }
+    .custom-label {
+        color: #a0aec0 !important;
+        font-size: 0.95rem !important;
+        font-weight: 500 !important;
+        margin-bottom: 10px !important;
+        display: block !important;
+    }
+    .custom-select {
+        background-color: #1f2736 !important;
+        color: #ffffff !important;
+        border: 1px solid #4a5568 !important;
+        border-radius: 8px !important;
+        padding: 12px 16px !important;
+        font-size: 0.95rem !important;
+        width: 100% !important;
+        height: 50px !important;
+        margin-bottom: 25px !important;
+        box-sizing: border-box !important;
+        outline: none !important;
+        transition: border-color 0.2s !important;
+    }
+    .custom-select:focus {
+        border-color: #3b82f6 !important;
+    }
+    .submit-btn {
+        background-color: #2563eb !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        border: none !important;
+        border-radius: 8px !important;
+        width: 100% !important;
+        height: 50px !important;
+        cursor: pointer !important;
+        transition: background-color 0.2s, transform 0.1s !important;
+        box-sizing: border-box !important;
+    }
+    .submit-btn:hover {
+        background-color: #1d4ed8 !important;
+    }
+    .submit-btn:active {
+        transform: scale(0.98) !important;
+    }
+    
+    /* İnteraktiv cümlə qutuları */
+    .sentence-box {
+        background-color: #1f2736 !important;
+        border-left: 4px solid #3b82f6 !important;
+        padding: 22px !important;
+        margin-bottom: 16px !important;
+        border-radius: 0 8px 8px 0 !important;
+        cursor: pointer !important;
+        position: relative !important;
+        transition: transform 0.2s, background-color 0.2s !important;
+        box-sizing: border-box !important;
+    }
+    .sentence-box:hover {
+        transform: translateY(-2px) !important;
+        background-color: #242f42 !important;
+    }
+    .english-text {
+        color: #ffffff !important;
+        font-size: 1.15rem !important;
+        font-weight: 500 !important;
+        margin: 0 !important;
+        padding-right: 110px !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Gizli tərcümə üslubu */
+    .azeri-text {
+        display: none;
+        opacity: 0;
+        color: #10b981 !important;
+        font-size: 1.05rem !important;
+        font-weight: 600 !important;
+        margin-top: 14px !important;
+        margin-bottom: 0 !important;
+        border-top: 1px dashed #2d3748 !important;
+        padding-top: 12px !important;
+        transition: opacity 0.3s ease-in-out !important;
+        line-height: 1.5 !important;
+    }
+    .badge-words {
+        background-color: #1f2736 !important;
+        color: #cbd5e0 !important;
+        border: 1px solid #2d3748 !important;
+        padding: 6px 12px !important;
+        border-radius: 6px !important;
+        font-size: 0.85rem !important;
+        margin-right: 6px !important;
+        margin-bottom: 8px !important;
+        display: inline-block !important;
+        font-weight: 500 !important;
+    }
+    .eye-indicator {
+        position: absolute !important;
+        right: 20px !important;
+        top: 24px !important;
+        color: #718096 !important;
+        font-size: 0.8rem !important;
+        font-weight: 600 !important;
+        user-select: none !important;
+        background: #161b26 !important;
+        padding: 4px 10px !important;
+        border-radius: 4px !important;
+        border: 1px solid #2d3748 !important;
+    }
+</style>
+
+<div class="story-container">
+    <div class="story-card">
+        
+        {% if choose_level %}
+            <div class="story-title">🤖 AI Hekayə Səviyyəsini Seçin</div>
+            <p style="color: #a0aec0; text-align: center; margin-bottom: 25px; font-size: 0.95rem; line-height: 1.6;">
+                Aşağıdakı sözlərdən istifadə edərək hekayə qurulacaq: <br><br>
+                {% for w in words %}
+                    <span class="badge-words">{{ w }}</span>
+                {% endfor %}
+            </p>
+            
+            <form action="/story" method="GET">
+                <label class="custom-label">
+                    Hansı səviyyədə cümlələr istəyirsiniz?
+                </label>
+                <select name="level" class="custom-select">
+                    <option value="A1">A1 (Beginner) - Çox sadə və qısa cümlələr</option>
+                    <option value="A2">A2 (Elementary) - Əsas səviyyəli cümlələr</option>
+                    <option value="B1" selected>B1 (Intermediate) - Orta səviyyəli cümlələr</option>
+                    <option value="B2">B2 (Upper Intermediate) - İrəli orta səviyyə</option>
+                </select>
+                <button type="submit" class="submit-btn">📖 Hekayəni Yarat</button>
+            </form>
+
+        {% else %}
+            <div class="story-title">📚 Sizin üçün Yaradılan Hekayə (<span style="color: #3b82f6;">{{ level }}</span>)</div>
+            
+            <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 25px; text-align: center;">
+                İstifadə olunan sözlər: 
+                {% for w in words %}
+                    <span class="badge-words" style="border: 1px solid #3b82f6 !important; color: #60a5fa !important;">{{ w }}</span>
+                {% endfor %}
+            </p>
+
+            {% if story %}
+                {% for item in story %}
+                    <div class="sentence-box" onclick="toggleTranslation(this)">
+                        <p class="english-text">🇬🇧 {{ item.eng }}</p>
+                        <p class="azeri-text">🇦🇿 {{ item.aze }}</p>
+                        <span class="eye-indicator">👁️ Kliklə</span>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: #e74c3c; text-align: center; font-weight: 500;">Hekayə yaradıla bilmədi. Yenidən yoxlayın.</p>
+            {% endif %}
+
+            <div style="text-align: center; margin-top: 30px; border-top: 1px solid #2d3748; padding-top: 20px;">
+                <a href="/story" style="color: #a0aec0; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#a0aec0'">
+                    🔄 Səviyyəni Dəyiş / Yenidən Qur
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<script>
+    function toggleTranslation(element) {
+        const azeriText = element.querySelector('.azeri-text');
+        const indicator = element.querySelector('.eye-indicator');
+        
+        if (azeriText.style.display === 'none' || azeriText.style.display === '') {
+            azeriText.style.display = 'block';
+            setTimeout(() => {
+                azeriText.style.opacity = '1';
+            }, 10);
+            
+            if (indicator) {
+                indicator.textContent = 'Gizlət';
+                indicator.style.color = '#10b981';
+                indicator.style.borderColor = '#10b981';
+            }
+        } else {
+            azeriText.style.opacity = '0';
+            setTimeout(() => {
+                azeriText.style.display = 'none';
+            }, 150);
+            
+            if (indicator) {
+                indicator.textContent = '👁️ Kliklə';
+                indicator.style.color = '#718096';
+                indicator.style.borderColor = '#2d3748';
+            }
+        }
+    }
+</script>
+{% endblock %}

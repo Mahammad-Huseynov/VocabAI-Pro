@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="overflow-x: auto;">
+    <h3>📚 Ümumi Lüğət Bazası ({{ vocab_list|length }})</h3>
+    <table class="grid-table">
+        <thead>
+            <tr>
+                <th>Söz</th>
+                <th>Mənası</th>
+                <th>Mərhələ (Gün)</th>
+                <th>İdarəetmə</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for word in vocab_list %}
+            <tr>
+                <td><strong style="color: var(--primary);">{{ word.word }}</strong></td>
+                <td>
+                    {{ word.meaning }}
+                    <br>
+                    <small style="color: #20c997; font-weight: bold; display: block; margin-top: 4px;">🇦🇿 Tərcümə: {{ word.default_translation }}</small>
+                </td>
+                <td><span class="badge">{{ word.interval }} gün</span></td>
+                <td>
+                    <form action="/delete/{{ word.id }}" method="POST" onsubmit="return confirm('Bu sözü bazadan silmək istədiyinizə əminsiniz?');">
+                        <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem; width: auto;">Sil</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

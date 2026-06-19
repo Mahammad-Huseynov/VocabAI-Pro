@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="az" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI Vocab Master Pro</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h2>🧠 VocabAI Pro</h2>
+        <nav>
+            <a href="/">Dashboard</a>
+            <a href="/story">AI Story</a>
+            <a href="/quiz">Quiz Paneli</a>
+            <a href="/all-words">Bütün Sözlər</a>
+        </nav>
+        <button class="theme-toggle-btn" id="themeToggle">🌓 Rejim</button>
+    </header>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
